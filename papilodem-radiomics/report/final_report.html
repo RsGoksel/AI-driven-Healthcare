@@ -1,0 +1,905 @@
+<!DOCTYPE html><html lang='tr'><head><meta charset='utf-8'><title>Radyomik Papilodem Siniflandirmasi - Final Rapor</title>
+<style>
+  @page {
+      size: A4;
+      margin: 3.5cm 2.5cm 2.5cm 3.5cm;
+      @bottom-center { content: counter(page); font-family: 'Times New Roman'; font-size: 10pt; }
+  }
+  html { font-size: 12pt; }
+  body {
+      font-family: 'Times New Roman', Times, serif;
+      line-height: 1.5;
+      color: #000;
+      text-align: justify;
+      hyphens: auto;
+  }
+  /* Cover page */
+  .cover {
+      text-align: center;
+      page-break-after: always;
+      padding-top: 2cm;
+  }
+  .cover .university { font-size: 16pt; font-weight: bold; margin-bottom: 0.4cm; }
+  .cover .faculty    { font-size: 13pt; margin-bottom: 0.4cm; }
+  .cover .course     { font-size: 12pt; margin: 2cm 0 1.5cm 0; }
+  .cover .title-main { font-size: 22pt; font-weight: bold; margin: 2.5cm 0 1cm 0; line-height: 1.4; }
+  .cover .subtitle   { font-size: 12pt; font-style: italic; margin-bottom: 4cm; }
+  .cover .author-block { margin: 1cm 0; }
+  .cover .author-name  { font-size: 13pt; font-weight: bold; }
+  .cover .author-email { font-size: 11pt; color: #444; }
+  .cover .date         { margin-top: 4cm; font-size: 13pt; font-weight: bold; }
+  .page-break          { page-break-after: always; }
+
+  /* Abstract pages */
+  .abstract-page h2 { text-align: center; }
+  .abstract-page p  { text-align: justify; text-indent: 1cm; }
+
+  /* TOC and list pages */
+  .toc h2, .list-page h2 { text-align: center; }
+  .toc table, .list-page table { width: 100%; }
+
+  /* Main headings (chapters) */
+  h2 {
+      font-size: 14pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-top: 1.5em;
+      margin-bottom: 0.6em;
+      border-bottom: 1px solid #000;
+      padding-bottom: 0.2em;
+      page-break-after: avoid;
+      page-break-before: always;
+  }
+  /* First H2 on title page should not break */
+  .cover h2 { page-break-before: avoid; border-bottom: none; }
+
+  h3 {
+      font-size: 12pt;
+      font-weight: bold;
+      margin-top: 1.2em;
+      margin-bottom: 0.4em;
+      page-break-after: avoid;
+  }
+
+  p { text-indent: 1cm; margin: 0.4em 0; }
+  ul, ol { margin: 0.6em 0 0.6em 1.5em; padding-left: 0.5em; }
+  li { margin: 0.2em 0; text-align: justify; }
+
+  table {
+      border-collapse: collapse;
+      margin: 0.8em auto;
+      font-size: 11pt;
+      page-break-inside: avoid;
+  }
+  th, td {
+      border: 1px solid #000;
+      padding: 4px 8px;
+  }
+  th { background: #eee; text-align: center; font-weight: bold; }
+
+  code { font-family: 'Consolas', 'Courier New', monospace; font-size: 10.5pt; }
+
+  img {
+      display: block;
+      max-width: 90%;
+      margin: 0.6em auto 0.2em auto;
+      page-break-inside: avoid;
+  }
+  img + em, img + p em {
+      display: block;
+      text-align: center;
+      font-size: 10.5pt;
+      margin-bottom: 0.8em;
+  }
+  em { font-style: italic; }
+  strong { font-weight: bold; }
+</style>
+</head><body><div class="cover">
+<div class="university">USKUDAR UNIVERSITESI</div>
+<div class="faculty">MUHENDISLIK VE DOGA BILIMLERI FAKULTESI</div>
+<div class="course">YAPAY ZEKA DERSI - FINAL PROJESI</div>
+<div class="title-main">RADYOMIK OZELLIKLER KULLANILARAK<br>PAPILODEM IKILI SINIFLANDIRMASI</div>
+<div class="subtitle">Patient-Level Cross-Validation, MRMR Feature Selection, Calibrated Soft-Voting Ensemble</div>
+<div class="author-block">
+<div class="author-name">Hazirlayan: Goksel SAGIROGLU</div>
+<div class="author-email">vespula.tr@gmail.com</div>
+</div>
+<div class="date">Haziran 2026</div>
+</div>
+<div class="abstract-page">
+<h2>OZET</h2>
+<p>Papilodem, intrakraniyal basincin yukselmesine bagli olarak gelisen bilateral optik disk sismesi olarak tanimlanmakta ve sebep oldugu olasi gorme kayiplari nedeniyle erken tanisi kritik onem tasimaktadir. Klinikte papilodem ile sahte papilodem arasindaki ayrimin uzman degerlendirmesine dayanmasi tani tutarliligini sinirlamaktadir [3] [12]. Bu calismada, optik diskten elde edilmis 746 radyomik ozellik kullanilarak makine ogrenmesi tabanli bir ikili siniflandirma sistemi gelistirilmistir. Veri seti 69 hastaya (48 normal, 21 papilodem) ait toplam 966 ornek icermektedir. Calismada hasta seviyesinde veri sizintisini engellemek amaciyla GroupShuffleSplit ile 10 dis tekrar ve StratifiedGroupKFold ile 5 ic kat capraz dogrulama kullanilmistir. Median imputation, dusuk varyans ve Pearson korelasyon esikli ozellik elemesi, RobustScaler olcekleme ve MRMR ozellik secimi adimlari, Optuna TPE ile hiperparametre optimizasyonu icinde, alti farkli siniflandirici (Lojistik Regresyon, RBF cekirdekli SVM, Rastgele Orman, ExtraTrees, Gradient Boosting, KNN) ve soft voting topluluk modeli ile uygulanmistir. Sigmoid kalibrasyon ve F1 maksimum esik secimi ile test asamasinda kullanilan model olasiliklarinin guvenilirligi saglanmistir. Sonuc olarak en yuksek ortalama makro-F1 degerine RBF cekirdekli SVM modeli ile ulasilmis (0.875 +/- 0.057), tek tekrar bazinda en iyi degeri yine SVM uretmistir (0.951). Friedman testi modeller arasinda anlamli bir genel fark bulundugunu (chi-kare = 15.83, p = 0.0147) gostermistir. SHAP tabanli yorumlanabilirlik analizi ile en bilgilendirici ozellikler raporlanmistir.</p>
+<p><strong>Anahtar Kelimeler:</strong> Radyomik, Papilodem, Ikili Siniflandirma, Hasta Seviyesinde Capraz Dogrulama, MRMR, Optuna, Kalibrasyon, SHAP.</p>
+</div>
+<div class="abstract-page">
+<h2>ABSTRACT</h2>
+<p>Papilledema is defined as bilateral optic disc swelling caused by elevated intracranial pressure, and its prompt diagnosis is clinically important to avoid permanent vision loss. The differentiation between papilledema and pseudopapilledema is challenging and traditionally relies on expert interpretation [3] [12]. In this study, a machine learning based binary classification system was developed using 746 radiomic features extracted from the optic disc. The dataset contains 966 samples obtained from 69 subjects (48 normal, 21 papilledema). To prevent patient-level data leakage, GroupShuffleSplit with 10 outer repeats and StratifiedGroupKFold with 5 inner folds were used. Median imputation, low-variance filtering, Pearson correlation pruning, RobustScaler normalisation and MRMR feature selection were embedded in a sklearn Pipeline. Six base classifiers (Logistic Regression, RBF SVM, Random Forest, ExtraTrees, Gradient Boosting, KNN) were tuned using Optuna TPE sampler with 50 trials per model, then combined with soft voting. Sigmoid calibration and F1-maximising threshold optimisation were applied so that the probability outputs used at test time are well calibrated. The RBF SVM achieved the highest mean macro-F1 (0.875 +/- 0.057) and the best single-repeat macro-F1 (0.951). Friedman test confirmed a global difference among models (chi-square = 15.83, p = 0.0147). SHAP analysis identified the most informative features.</p>
+<p><strong>Keywords:</strong> Radiomics, Papilledema, Binary Classification, Patient-Level Cross-Validation, MRMR, Optuna, Calibration, SHAP.</p>
+</div>
+<div class="toc">
+<h2>ICINDEKILER</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Bolum</th>
+<th style="text-align: left;">Baslik</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">OZET</td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">ABSTRACT</td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">ICINDEKILER</td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">SEKILLER LISTESI</td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">TABLOLAR LISTESI</td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">KISALTMALAR</td>
+</tr>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">GIRIS</td>
+</tr>
+<tr>
+<td style="text-align: center;">1.1</td>
+<td style="text-align: left;">Problemin Tanimi ve Onemi</td>
+</tr>
+<tr>
+<td style="text-align: center;">1.2</td>
+<td style="text-align: left;">Calismanin Amaci ve Katkilari</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">LITERATUR TARAMASI</td>
+</tr>
+<tr>
+<td style="text-align: center;">2.1</td>
+<td style="text-align: left;">Papilodem Goruntuleme Tabanli Tani</td>
+</tr>
+<tr>
+<td style="text-align: center;">2.2</td>
+<td style="text-align: left;">Radyomik Veri ile Siniflandirma</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">MATERYAL VE YONTEM</td>
+</tr>
+<tr>
+<td style="text-align: center;">3.1</td>
+<td style="text-align: left;">Veri Seti</td>
+</tr>
+<tr>
+<td style="text-align: center;">3.2</td>
+<td style="text-align: left;">Veri On Isleme</td>
+</tr>
+<tr>
+<td style="text-align: center;">3.3</td>
+<td style="text-align: left;">Ozellik Secimi (MRMR)</td>
+</tr>
+<tr>
+<td style="text-align: center;">3.4</td>
+<td style="text-align: left;">Siniflandirma Modelleri</td>
+</tr>
+<tr>
+<td style="text-align: center;">3.5</td>
+<td style="text-align: left;">Hiperparametre Optimizasyonu</td>
+</tr>
+<tr>
+<td style="text-align: center;">3.6</td>
+<td style="text-align: left;">Capraz Dogrulama Yapisi</td>
+</tr>
+<tr>
+<td style="text-align: center;">3.7</td>
+<td style="text-align: left;">Kalibrasyon ve Esik Optimizasyonu</td>
+</tr>
+<tr>
+<td style="text-align: center;">3.8</td>
+<td style="text-align: left;">Topluluk Ogrenmesi (Ensemble)</td>
+</tr>
+<tr>
+<td style="text-align: center;">3.9</td>
+<td style="text-align: left;">Degerlendirme Metrikleri</td>
+</tr>
+<tr>
+<td style="text-align: center;">3.10</td>
+<td style="text-align: left;">Istatistiksel Analiz</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">BULGULAR</td>
+</tr>
+<tr>
+<td style="text-align: center;">4.1</td>
+<td style="text-align: left;">Genel Performans Karsilastirmasi</td>
+</tr>
+<tr>
+<td style="text-align: center;">4.2</td>
+<td style="text-align: left;">Istatistiksel Karsilastirma</td>
+</tr>
+<tr>
+<td style="text-align: center;">4.3</td>
+<td style="text-align: left;">Kalibrasyon Analizi</td>
+</tr>
+<tr>
+<td style="text-align: center;">4.4</td>
+<td style="text-align: left;">Ozellik Yorumlanabilirligi (SHAP)</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">TARTISMA</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">SONUC VE ONERILER</td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">KAYNAKLAR</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="list-page">
+<h2>SEKILLER LISTESI</h2>
+<ul>
+<li><strong>Sekil 3.1.</strong> Calismada uygulanan veri akisi diyagrami</li>
+<li><strong>Sekil 4.1.</strong> Modeller arasi ortalama makro-F1 karsilastirmasi</li>
+<li><strong>Sekil 4.2.</strong> ROC egrileri (tum modeller, 10 outer repeat ortalamasi)</li>
+<li><strong>Sekil 4.3.</strong> Precision-Recall egrileri</li>
+<li><strong>Sekil 4.4.</strong> Karisiklik matrisi (en iyi model, en iyi tekrar)</li>
+<li><strong>Sekil 4.5.</strong> Kalibrasyon egrileri (sigmoid Platt sonrasi)</li>
+<li><strong>Sekil 4.6.</strong> Ozellik kararliligi: MRMR secim frekansi</li>
+<li><strong>Sekil 4.7.</strong> SHAP ozet grafigi (ExtraTrees uzerinde)</li>
+</ul>
+<h2>TABLOLAR LISTESI</h2>
+<ul>
+<li><strong>Tablo 3.1.</strong> Sinif dagilimi ve hasta sayilari</li>
+<li><strong>Tablo 3.2.</strong> Optuna hiperparametre arama uzaylari</li>
+<li><strong>Tablo 4.1.</strong> Modellerin tum metriklerde performansi (mean +/- std)</li>
+<li><strong>Tablo 4.2.</strong> Macro-F1 siralamasi</li>
+<li><strong>Tablo 4.3.</strong> Wilcoxon pairwise testi (Bonferroni duzeltmeli)</li>
+<li><strong>Tablo 4.4.</strong> SHAP analizinde en yuksek katkili ilk 10 ozellik</li>
+</ul>
+<h2>KISALTMALAR</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Kisaltma</th>
+<th style="text-align: left;">Acilim</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">AUC</td>
+<td style="text-align: left;">Area Under Curve (Egri Alti Alan)</td>
+</tr>
+<tr>
+<td style="text-align: center;">CV</td>
+<td style="text-align: left;">Cross-Validation (Capraz Dogrulama)</td>
+</tr>
+<tr>
+<td style="text-align: center;">ET</td>
+<td style="text-align: left;">Extra Trees</td>
+</tr>
+<tr>
+<td style="text-align: center;">GB</td>
+<td style="text-align: left;">Gradient Boosting</td>
+</tr>
+<tr>
+<td style="text-align: center;">KNN</td>
+<td style="text-align: left;">K-Nearest Neighbors (K-En Yakin Komsu)</td>
+</tr>
+<tr>
+<td style="text-align: center;">LR</td>
+<td style="text-align: left;">Logistic Regression (Lojistik Regresyon)</td>
+</tr>
+<tr>
+<td style="text-align: center;">MRMR</td>
+<td style="text-align: left;">Minimum Redundancy Maximum Relevance</td>
+</tr>
+<tr>
+<td style="text-align: center;">OKT</td>
+<td style="text-align: left;">Optik Koherens Tomografi</td>
+</tr>
+<tr>
+<td style="text-align: center;">ONH</td>
+<td style="text-align: left;">Optic Nerve Head (Optik Sinir Basi)</td>
+</tr>
+<tr>
+<td style="text-align: center;">PR</td>
+<td style="text-align: left;">Precision-Recall</td>
+</tr>
+<tr>
+<td style="text-align: center;">RF</td>
+<td style="text-align: left;">Random Forest (Rastgele Orman)</td>
+</tr>
+<tr>
+<td style="text-align: center;">ROC</td>
+<td style="text-align: left;">Receiver Operating Characteristic</td>
+</tr>
+<tr>
+<td style="text-align: center;">SHAP</td>
+<td style="text-align: left;">SHapley Additive exPlanations</td>
+</tr>
+<tr>
+<td style="text-align: center;">SVM</td>
+<td style="text-align: left;">Support Vector Machine (Destek Vektor Makinesi)</td>
+</tr>
+<tr>
+<td style="text-align: center;">TPE</td>
+<td style="text-align: left;">Tree-structured Parzen Estimator</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2>1. GIRIS</h2>
+<h3>1.1. Problemin Tanimi ve Onemi</h3>
+<p>Papilodem, intrakraniyal basincin yukselmesine bagli olarak gelisen ve bilateral optik disk sismesi seklinde kendini gosteren bir tablodur [12]. Klinik pratikte papilodemin sahte papilodem (pseudopapilledem) ile karistirilmasi sik karsilasilan bir durum olup, dogru tani saglanamadiginda gereksiz invaziv girisimlere ya da daha agir olarak gorme kaybiyla sonuclanan gecikmis mudahalelere yol acabilmektedir [3]. Geleneksel olarak tani fundus fotografi veya optik koherens tomografi (OKT) goruntulerinin uzman gozlemine dayanmakta, bu durum hem deneyim farklarindan kaynaklanan tutarsizliklara hem de uzun degerlendirme surelerine yol acmaktadir.</p>
+<p>Son yillarda goruntuleme verisinden cikartilan radyomik ozellikler (birinci ve ikinci dereceden istatistikler, doku ozellikleri, sekil tanimlayicilari vb.) makine ogrenmesi yontemleriyle birlestirildiginde, uzman gozlemi olmaksizin yuksek dogruluklu tani sistemleri kurulabildigi gosterilmistir [1] [6]. Radyomik veride en buyuk teknik zorluk yuksek boyutluluk (sample basina yuzlerce ozellik) ile gorece kucuk hasta kohortlarinin bir arada bulunmasidir. Bu durum overfitting riskini arttirmakta ve ozellik secimi, kalibrasyon ve hasta seviyesinde sizintinin engellenmesi gibi metodolojik dikkat noktalarini one cikarmaktadir.</p>
+<h3>1.2. Calismanin Amaci ve Katkilari</h3>
+<p>Bu calismanin amaci, verilen radyomik veri seti uzerinde Normal ile Papilodem siniflarini ayirt etmek uzere akademik standartlara uygun, veri sizintisiz, kalibrasyonlu ve yorumlanabilir bir makine ogrenmesi pipeline'inin tasarlanmasi ve degerlendirilmesidir. Calismanin temel katkilari su sekilde ozetlenebilir:</p>
+<ul>
+<li>Hasta seviyesinde sizintiyi sistematik olarak engelleyen, GroupShuffleSplit ile dis tekrar ve StratifiedGroupKFold ile ic capraz dogrulamaya dayanan tutarli bir degerlendirme yapisi kurulmustur.</li>
+<li>Median imputation, dusuk varyans ve Pearson korelasyon esikli ozellik elemesi, RobustScaler olcekleme ve MRMR ozellik secimi adimlari tek bir sklearn Pipeline icinde butunlestirilmistir.</li>
+<li>Alti farkli siniflandirici Optuna TPE ile her tekrar icinde yeniden tunlanmis, hesaplama maliyetini dusurmek icin Pipeline cache mekanizmasi kullanilmistir.</li>
+<li>Sklearn 1.6 sonrasi <code>CalibratedClassifierCV</code> ile yasanan metadata routing sorununa karsi manuel grup-bilincli Platt scaling sarmalayicisi gelistirilmistir.</li>
+<li>SHAP TreeExplainer ile model yorumlanabilirligi saglanmis, ozellik kararliligi 10 dis tekrar boyunca olculmustur.</li>
+</ul>
+<h2>2. LITERATUR TARAMASI</h2>
+<h3>2.1. Papilodem Goruntuleme Tabanli Tani</h3>
+<p>Papilodemin OKT veya fundus fotografi temelli otomatik siniflandirilmasina yonelik calismalar son yillarda hizla artmistir. Shenoy ve ark. [3] AutoML platformlari kullanarak yakin kizilotesi reflektans goruntuleri uzerinde papilodemin sahte papilodem ile ayrimi calismasinda Amazon Rekognition modelinin AUC 0.90 ve F1 0.81 ile en iyi sonucu verdigini bildirmistir. Szanto ve ark. [4] 3B OKT hacimleri uzerinde derin ogrenme tabanli bir yaklasimla papilodem, NAION ve saglikli gozleri ayirmis, ic dogrulamada %94.9 dogruluga ulasmistir. Girard ve ark. [5] optik sinir basinin 3B yapisal analizi yoluyla papilodemi optik disk drusen'den ayirt etmistir. Bu calismalar genel olarak derin ogrenme tabanli yaklasimlara odaklanmakla birlikte, kucuk veri rejimlerinde klasik makine ogrenmesi yontemleri ile birlikte ozellik muhendisligi yapilmasinin halen yuksek dogruluklu sonuclar saglayabildigi vurgulanmaktadir [12].</p>
+<h3>2.2. Radyomik Veri ile Siniflandirma</h3>
+<p>Radyomik veriyle ikili siniflandirma problemi, yuksek boyutluluk ve gorece sinirli ornek sayisi nedeniyle ozellik secimine son derece duyarli oldugundan, alandaki kapsamli karsilastirma calismalari onem tasimaktadir. Demircioglu [1] on radyomik veri seti uzerinde 29 ozellik secim yontemini karsilastirmis; sade yontemlerin (ANOVA, LASSO, MRMR ensemble) karmasik yontemlerden istatistiksel olarak farklilik gostermeden daha kararli sonuclar urettigini bildirmistir. Bu nedenle, calismamizda MRMR yontemi tercih edilmistir.</p>
+<p>Sinif dengesizligi konusunda, ayni yazarin sonraki calismasi [2] on bes radyomik veri setinde dokuz farkli yeniden orneklem yontemini karsilastirmis ve resampling yontemlerinin AUC katkisinin ortalama +0.015 ile sinirli kaldigini gostermistir. Bunun yaninda yeniden orneklem hasta seviyesindeki gruplama kisitiyla cakistigi icin sentetik orneklerin grup yapisini bozdugu vurgulanmistir. Bu nedenle calismamizda <code>class_weight = 'balanced'</code> parametresi tercih edilmistir.</p>
+<h2>3. MATERYAL VE YONTEM</h2>
+<h3>3.1. Veri Seti</h3>
+<p>Calismada kullanilan veri seti, optik diskten cikartilmis 746 radyomik ozellik iceren iki CSV dosyasindan olusmaktadir: <code>normal_radiomics.csv</code> ve <code>papilodem_radiomics.csv</code>. Veri setinin ozet bilgileri Tablo 3.1'de verilmistir.</p>
+<p><strong>Tablo 3.1.</strong> Sinif dagilimi ve hasta sayilari.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Sinif</th>
+<th style="text-align: center;">Hasta Sayisi</th>
+<th style="text-align: center;">Ornek Sayisi</th>
+<th style="text-align: center;">Ornek/Hasta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Normal (0)</td>
+<td style="text-align: center;">48</td>
+<td style="text-align: center;">672</td>
+<td style="text-align: center;">14</td>
+</tr>
+<tr>
+<td style="text-align: center;">Papilodem (1)</td>
+<td style="text-align: center;">21</td>
+<td style="text-align: center;">294</td>
+<td style="text-align: center;">14</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Toplam</strong></td>
+<td style="text-align: center;"><strong>69</strong></td>
+<td style="text-align: center;"><strong>966</strong></td>
+<td style="text-align: center;"><strong>14</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Her hasta icin sag ve sol goz olmak uzere iki taraf, her taraf icin yedi dilim olmak uzere toplam 14 ornek bulunmaktadir. <code>PatientIndex</code> sutunu her iki dosyada da 1'den baslayarak yeniden numaralandirildigi icin dogrudan birlestirildiginde ayni kimligin iki ayri hastayi temsil etmesi soz konusudur. Bu sorunun onune gecmek amaciyla normal hastalara <code>N_</code> ve papilodem hastalarina <code>P_</code> on eki eklenmistir. Veri yuklemenin ardindan (i) iki sinif arasinda hasta ortakligi olmadigi, (ii) her hastanin tek bir sinif etiketine sahip oldugu ve (iii) hasta basina ornek sayisinin sabit oldugu, otomatik assert ifadeleriyle dogrulanmaktadir.</p>
+<h3>3.2. Veri On Isleme</h3>
+<p>On isleme adimlarinin tamami <code>sklearn.Pipeline</code> icine yerlestirilmis ve yalnizca egitim verisi uzerinde fit edilmistir. Sirayla uygulanan adimlar sunlardir: ortanca deger ile eksik veri tamamlama (<code>SimpleImputer(strategy='median')</code>), 0.01 esikli dusuk varyans elemesi (<code>VarianceThreshold</code>), Pearson korelasyonu |r| &gt; 0.95 olan ozelliklerin elenmesi (calismaya ozel yazilan <code>CorrelationFilter</code>) ve <code>RobustScaler</code> ile uc-noktaya duyarli olmayan olcekleme. Veri yuklemede tespit edilen tek bir sonsuz deger NaN'a donusturulerek imputer'a teslim edilmistir.</p>
+<h3>3.3. Ozellik Secimi (MRMR)</h3>
+<p>Ozellik secimi icin Peng ve ark. [10] tarafindan onerilen Minimum Redundancy Maximum Relevance (MRMR) algoritmasi uygulanmistir. Alaka skoru Mutual Information ile, artikilik skoru ise Pearson korelasyonu ile hesaplanmistir. Secilecek ozellik sayisi $k \in {20, 50, 100}$ olarak Optuna icinde kategorik bir parametre olarak optimize edilmistir.</p>
+<h3>3.4. Siniflandirma Modelleri</h3>
+<p>Calismada degerlendirilen alti temel siniflandirici sunlardir: Lojistik Regresyon (saga cozucu, <code>class_weight='balanced'</code>), RBF cekirdekli Destek Vektor Makinesi, Rastgele Orman, ExtraTrees, Gradient Boosting ve K-En Yakin Komsu [7]. Hiperparametre arama uzaylari Tablo 3.2'de verilmistir.</p>
+<p><strong>Tablo 3.2.</strong> Optuna hiperparametre arama uzaylari.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Model</th>
+<th style="text-align: left;">Parametre</th>
+<th style="text-align: left;">Aralik / Set</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">LR</td>
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">log[1e-3, 1e2]</td>
+</tr>
+<tr>
+<td style="text-align: center;">LR</td>
+<td style="text-align: left;">penalty</td>
+<td style="text-align: left;">{l1, l2}</td>
+</tr>
+<tr>
+<td style="text-align: center;">SVM</td>
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">log[1e-2, 1e2]</td>
+</tr>
+<tr>
+<td style="text-align: center;">SVM</td>
+<td style="text-align: left;">gamma</td>
+<td style="text-align: left;">log[1e-4, 1e0]</td>
+</tr>
+<tr>
+<td style="text-align: center;">RF / ET</td>
+<td style="text-align: left;">n_estimators</td>
+<td style="text-align: left;">[100, 500] step 50</td>
+</tr>
+<tr>
+<td style="text-align: center;">RF / ET</td>
+<td style="text-align: left;">max_depth</td>
+<td style="text-align: left;">[3, 20]</td>
+</tr>
+<tr>
+<td style="text-align: center;">RF / ET</td>
+<td style="text-align: left;">min_samples_leaf</td>
+<td style="text-align: left;">[1, 10]</td>
+</tr>
+<tr>
+<td style="text-align: center;">RF / ET</td>
+<td style="text-align: left;">max_features</td>
+<td style="text-align: left;">{sqrt, log2}</td>
+</tr>
+<tr>
+<td style="text-align: center;">GB</td>
+<td style="text-align: left;">n_estimators</td>
+<td style="text-align: left;">[100, 500] step 50</td>
+</tr>
+<tr>
+<td style="text-align: center;">GB</td>
+<td style="text-align: left;">learning_rate</td>
+<td style="text-align: left;">log[1e-3, 3e-1]</td>
+</tr>
+<tr>
+<td style="text-align: center;">GB</td>
+<td style="text-align: left;">max_depth</td>
+<td style="text-align: left;">[2, 8]</td>
+</tr>
+<tr>
+<td style="text-align: center;">GB</td>
+<td style="text-align: left;">subsample</td>
+<td style="text-align: left;">[0.5, 1.0]</td>
+</tr>
+<tr>
+<td style="text-align: center;">KNN</td>
+<td style="text-align: left;">n_neighbors</td>
+<td style="text-align: left;">[3, 25]</td>
+</tr>
+<tr>
+<td style="text-align: center;">KNN</td>
+<td style="text-align: left;">weights</td>
+<td style="text-align: left;">{uniform, distance}</td>
+</tr>
+<tr>
+<td style="text-align: center;">KNN</td>
+<td style="text-align: left;">metric</td>
+<td style="text-align: left;">{euclidean, manhattan}</td>
+</tr>
+<tr>
+<td style="text-align: center;">Tum modeller</td>
+<td style="text-align: left;">mrmr_k</td>
+<td style="text-align: left;">{20, 50, 100}</td>
+</tr>
+</tbody>
+</table>
+<h3>3.5. Hiperparametre Optimizasyonu</h3>
+<p>Hiperparametre optimizasyonu Optuna kutuphanesi [8] ile gerceklestirilmistir. TPE (Tree-structured Parzen Estimator) ornekleyici sabit tohum 42 ile baslatilmis, model basina 50 trial calistirilmistir. Amac fonksiyonu olarak ic 5-kat capraz dogrulama uzerinden hesaplanan ortalama makro-F1 secilmistir. Grup folds altinda yuksek varyans riski nedeniyle median pruner kullanilmamistir.</p>
+<h3>3.6. Capraz Dogrulama Yapisi</h3>
+<p>Dis dongude <code>GroupShuffleSplit</code> ile 10 patient-level tekrar uretilmistir; her tekrarda hastalarin %70'i egitim ve dogrulama, %30'u test olarak ayrilmistir. Ic dongude ise Optuna trial'inin her cagrisi sirasinda <code>StratifiedGroupKFold(n_splits=5)</code> ile hasta gruplari korunmustur. Boylece ayni hastaya ait orneklerin farkli setlere dusmesi engellenmis, sizinti olusturma riski ortadan kaldirilmistir.</p>
+<h3>3.7. Kalibrasyon ve Esik Optimizasyonu</h3>
+<p>Sklearn 1.6 surumunde <code>CalibratedClassifierCV.fit</code> cagrisi metadata routing API'si nedeniyle <code>StratifiedGroupKFold</code> ile birlikte kullanildiginda <code>groups</code> parametresini ic ayiriciya iletmemekte, bu da kalibrasyon foldlarinda hasta sizintisina yol acmaktadir. Sorunu cozmek icin calismaya ozel <code>GroupAwareSigmoidCalibrator</code> sinifi yazilmis ve ic foldlardan elde edilen olasiliklar uzerinde Platt scaling [11] uygulanmistir.</p>
+<p>Esik optimizasyonu sirasinda yine StratifiedGroupKFold ile dogrulama tahminleri uretilmis ve [0.05, 0.95] araliginda 91 noktada F1 skoru hesaplanmistir. F1 maksimum esik daha sonra yalnizca test setinde uygulanmis, test verisi uzerinde esik ayari yapilmamistir.</p>
+<h3>3.8. Topluluk Ogrenmesi (Ensemble)</h3>
+<p>Tang ve ark. [6] gibi calismalarda etkinligi gosterilen soft voting yaklasimi tercih edilmistir. Kalibre edilmis Random Forest, ExtraTrees ve Gradient Boosting modellerinin olasilik ciktilari ortalanarak topluluk olasiligi elde edilmis, ardindan F1 maksimum esik uygulanmistir.</p>
+<h3>3.9. Degerlendirme Metrikleri</h3>
+<p>Spec dogrultusunda dokuz metrik raporlanmistir: Accuracy, Precision, Recall, F1, Macro-F1, ROC-AUC, PR-AUC, Balanced Accuracy ve Brier skoru. Her metrik 10 dis tekrar uzerinden ortalama ve standart sapma olarak verilmistir.</p>
+<h3>3.10. Istatistiksel Analiz</h3>
+<p>Yedi modelin (alti temel + topluluk) makro-F1 degerleri uzerinde Friedman testi uygulanmis, ardindan ikili karsilastirmalar Wilcoxon isaretli siralar testi ve Bonferroni duzeltmesi ile (21 ikili karsilastirma, alpha = 0.05/21 yaklasik 0.0024) yapilmistir.</p>
+<h2>4. BULGULAR</h2>
+<h3>4.1. Genel Performans Karsilastirmasi</h3>
+<p>Tam pipeline calismasi 70 dakika surmus ve yedi modelin 10 dis tekrar uzerindeki performans ozeti Tablo 4.1'de verilmistir. En yuksek ortalama makro-F1 degeri SVM modeli ile (0.875) elde edilmistir. Tek tekrar bazinda ise 9. tekrarda SVM modeli ile makro-F1 = 0.951 olarak en iyi degere ulasilmistir. Sekil 4.1 modeller arasi makro-F1 karsilastirmasini gostermektedir.</p>
+<p><strong>Tablo 4.1.</strong> Modellerin tum metriklerde performansi (mean +/- std).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">model</th>
+<th style="text-align: left;">accuracy</th>
+<th style="text-align: left;">precision</th>
+<th style="text-align: left;">recall</th>
+<th style="text-align: left;">f1</th>
+<th style="text-align: left;">macro_f1</th>
+<th style="text-align: left;">roc_auc</th>
+<th style="text-align: left;">pr_auc</th>
+<th style="text-align: left;">balanced_accuracy</th>
+<th style="text-align: left;">brier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">ET</td>
+<td style="text-align: left;">0.894 +/- 0.045</td>
+<td style="text-align: left;">0.918 +/- 0.063</td>
+<td style="text-align: left;">0.716 +/- 0.154</td>
+<td style="text-align: left;">0.794 +/- 0.089</td>
+<td style="text-align: left;">0.860 +/- 0.058</td>
+<td style="text-align: left;">0.927 +/- 0.056</td>
+<td style="text-align: left;">0.901 +/- 0.069</td>
+<td style="text-align: left;">0.843 +/- 0.073</td>
+<td style="text-align: left;">0.085 +/- 0.039</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ensemble</td>
+<td style="text-align: left;">0.864 +/- 0.054</td>
+<td style="text-align: left;">0.788 +/- 0.109</td>
+<td style="text-align: left;">0.779 +/- 0.152</td>
+<td style="text-align: left;">0.772 +/- 0.082</td>
+<td style="text-align: left;">0.836 +/- 0.059</td>
+<td style="text-align: left;">0.927 +/- 0.055</td>
+<td style="text-align: left;">0.901 +/- 0.073</td>
+<td style="text-align: left;">0.839 +/- 0.067</td>
+<td style="text-align: left;">0.085 +/- 0.036</td>
+</tr>
+<tr>
+<td style="text-align: left;">GB</td>
+<td style="text-align: left;">0.865 +/- 0.097</td>
+<td style="text-align: left;">0.797 +/- 0.288</td>
+<td style="text-align: left;">0.663 +/- 0.292</td>
+<td style="text-align: left;">0.709 +/- 0.268</td>
+<td style="text-align: left;">0.810 +/- 0.163</td>
+<td style="text-align: left;">0.910 +/- 0.064</td>
+<td style="text-align: left;">0.888 +/- 0.081</td>
+<td style="text-align: left;">0.812 +/- 0.135</td>
+<td style="text-align: left;">0.094 +/- 0.038</td>
+</tr>
+<tr>
+<td style="text-align: left;">KNN</td>
+<td style="text-align: left;">0.891 +/- 0.041</td>
+<td style="text-align: left;">0.894 +/- 0.072</td>
+<td style="text-align: left;">0.723 +/- 0.149</td>
+<td style="text-align: left;">0.790 +/- 0.091</td>
+<td style="text-align: left;">0.858 +/- 0.058</td>
+<td style="text-align: left;">0.882 +/- 0.074</td>
+<td style="text-align: left;">0.842 +/- 0.096</td>
+<td style="text-align: left;">0.844 +/- 0.070</td>
+<td style="text-align: left;">0.092 +/- 0.035</td>
+</tr>
+<tr>
+<td style="text-align: left;">LR</td>
+<td style="text-align: left;">0.836 +/- 0.074</td>
+<td style="text-align: left;">0.921 +/- 0.100</td>
+<td style="text-align: left;">0.544 +/- 0.249</td>
+<td style="text-align: left;">0.640 +/- 0.186</td>
+<td style="text-align: left;">0.766 +/- 0.114</td>
+<td style="text-align: left;">0.879 +/- 0.079</td>
+<td style="text-align: left;">0.852 +/- 0.079</td>
+<td style="text-align: left;">0.756 +/- 0.108</td>
+<td style="text-align: left;">0.127 +/- 0.039</td>
+</tr>
+<tr>
+<td style="text-align: left;">RF</td>
+<td style="text-align: left;">0.890 +/- 0.042</td>
+<td style="text-align: left;">0.900 +/- 0.077</td>
+<td style="text-align: left;">0.721 +/- 0.168</td>
+<td style="text-align: left;">0.787 +/- 0.093</td>
+<td style="text-align: left;">0.856 +/- 0.058</td>
+<td style="text-align: left;">0.921 +/- 0.058</td>
+<td style="text-align: left;">0.896 +/- 0.076</td>
+<td style="text-align: left;">0.841 +/- 0.076</td>
+<td style="text-align: left;">0.088 +/- 0.035</td>
+</tr>
+<tr>
+<td style="text-align: left;">SVM</td>
+<td style="text-align: left;">0.902 +/- 0.043</td>
+<td style="text-align: left;">0.917 +/- 0.092</td>
+<td style="text-align: left;">0.753 +/- 0.144</td>
+<td style="text-align: left;">0.817 +/- 0.089</td>
+<td style="text-align: left;">0.875 +/- 0.057</td>
+<td style="text-align: left;">0.922 +/- 0.051</td>
+<td style="text-align: left;">0.887 +/- 0.071</td>
+<td style="text-align: left;">0.861 +/- 0.068</td>
+<td style="text-align: left;">0.086 +/- 0.038</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tablo 4.2.</strong> Macro-F1 siralamasi (en iyi -&gt; en kotu).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Sira</th>
+<th style="text-align: center;">Model</th>
+<th style="text-align: center;">Macro-F1 (mean +/- std)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">SVM</td>
+<td style="text-align: center;">0.875 +/- 0.057</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">ET</td>
+<td style="text-align: center;">0.860 +/- 0.058</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">KNN</td>
+<td style="text-align: center;">0.858 +/- 0.058</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">RF</td>
+<td style="text-align: center;">0.856 +/- 0.058</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">Ensemble</td>
+<td style="text-align: center;">0.836 +/- 0.059</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">GB</td>
+<td style="text-align: center;">0.810 +/- 0.163</td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">LR</td>
+<td style="text-align: center;">0.766 +/- 0.114</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Sekil 4.1. Modeller arasi makro-F1 karsilastirmasi." src="../04_GRAFIKLER/model_comparison_macro_f1.png" />
+<em>Sekil 4.1. Modeller arasi ortalama makro-F1 karsilastirmasi.</em></p>
+<p><img alt="Sekil 4.2. ROC egrileri." src="../04_GRAFIKLER/roc_curves.png" />
+<em>Sekil 4.2. ROC egrileri (tum modeller, 10 outer repeat ortalamasi).</em></p>
+<p><img alt="Sekil 4.3. PR egrileri." src="../04_GRAFIKLER/pr_curves.png" />
+<em>Sekil 4.3. Precision-Recall egrileri.</em></p>
+<p><img alt="Sekil 4.4. Karisiklik matrisi." src="../04_GRAFIKLER/confusion_matrix.png" />
+<em>Sekil 4.4. Karisiklik matrisi (SVM, 9. tekrar).</em></p>
+<h3>4.2. Istatistiksel Karsilastirma</h3>
+<p>Yedi modelin 10 tekrarli makro-F1 degerleri uzerinde yapilan Friedman testi sonucunda chi-kare = 15.83, p = 0.0147 degerleri elde edilmistir. p &lt; 0.05 oldugundan modeller arasinda genel bir farkin bulundugu istatistiksel olarak dogrulanmistir.</p>
+<p>Tablo 4.3, Bonferroni duzeltmeli Wilcoxon isaretli siralar testinin sonuclarini sunmaktadir. Toplam 21 ikili karsilastirmadan 0 tanesi Bonferroni duzeltmesi sonrasi anlamliligini korumustur. Bu durum, 10 tekrarli kucuk orneklem ile 21 esli karsilastirma yapilmasinin getirdigi sikilastirilmis alpha = 0.0024 esiginin dogal bir sonucudur ve sonuclarin yon gosterici olarak yorumlanmasi gerektigini ortaya koymaktadir.</p>
+<p><strong>Tablo 4.3.</strong> Wilcoxon pairwise testi (Bonferroni duzeltmeli).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">model_a</th>
+<th style="text-align: left;">model_b</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p_value</th>
+<th style="text-align: right;">p_bonferroni</th>
+<th style="text-align: left;">significant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">ET</td>
+<td style="text-align: left;">Ensemble</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">0.160156</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">ET</td>
+<td style="text-align: left;">GB</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">0.625</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">ET</td>
+<td style="text-align: left;">KNN</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">0.678402</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">ET</td>
+<td style="text-align: left;">LR</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.00390625</td>
+<td style="text-align: right;">0.0820312</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">ET</td>
+<td style="text-align: left;">RF</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">0.375</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">ET</td>
+<td style="text-align: left;">SVM</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">0.431641</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ensemble</td>
+<td style="text-align: left;">GB</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">0.431641</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ensemble</td>
+<td style="text-align: left;">KNN</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">0.232422</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ensemble</td>
+<td style="text-align: left;">LR</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.130859</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ensemble</td>
+<td style="text-align: left;">RF</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.130859</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ensemble</td>
+<td style="text-align: left;">SVM</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.0195312</td>
+<td style="text-align: right;">0.410156</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">GB</td>
+<td style="text-align: left;">KNN</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">0.921875</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">GB</td>
+<td style="text-align: left;">LR</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.105469</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">GB</td>
+<td style="text-align: left;">RF</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">GB</td>
+<td style="text-align: left;">SVM</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.130859</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">KNN</td>
+<td style="text-align: left;">LR</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.00390625</td>
+<td style="text-align: right;">0.0820312</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">KNN</td>
+<td style="text-align: left;">RF</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">0.921875</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">KNN</td>
+<td style="text-align: left;">SVM</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">0.275391</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">LR</td>
+<td style="text-align: left;">RF</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.00976562</td>
+<td style="text-align: right;">0.205078</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">LR</td>
+<td style="text-align: left;">SVM</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.00390625</td>
+<td style="text-align: right;">0.0820312</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr>
+<td style="text-align: left;">RF</td>
+<td style="text-align: left;">SVM</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">0.375</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">False</td>
+</tr>
+</tbody>
+</table>
+<h3>4.3. Kalibrasyon Analizi</h3>
+<p>Sigmoid kalibrasyon sonrasinda elde edilen Brier skorlarinin 0.08 ile 0.13 araliginda yogunlastigi gozlenmistir (Tablo 4.1). Kalibrasyon egrileri (Sekil 4.5) tum modellerde diyagonale yakin seyretmis, agac tabanli modellerin tipik over/under confidence egilimi sigmoid kalibrasyonla buyuk olcude duzelmistir [11].</p>
+<p><img alt="Sekil 4.5. Kalibrasyon egrileri." src="../04_GRAFIKLER/calibration_curves.png" />
+<em>Sekil 4.5. Kalibrasyon egrileri (sigmoid Platt sonrasi).</em></p>
+<h3>4.4. Ozellik Yorumlanabilirligi (SHAP)</h3>
+<p>ExtraTrees modeli uzerinde SHAP TreeExplainer ile hesaplanan ortalama mutlak SHAP degerleri, en yuksek katkili ilk on radyomik ozelligi belirlemistir. Sonuclar Tablo 4.4'te verilmistir. SHAP ozet grafigi Sekil 4.7'de sunulmustur.</p>
+<p><strong>Tablo 4.4.</strong> SHAP analizinde en yuksek katkili ilk 10 ozellik.</p>
+<p>| Sira | Ozellik | mean |SHAP| |
+|:----:|:-------:|:------------:|
+| 1 | <code>Feature_0479</code> | 0.0748 |
+| 2 | <code>Feature_0478</code> | 0.0305 |
+| 3 | <code>Feature_0102</code> | 0.0284 |
+| 4 | <code>Feature_0028</code> | 0.0259 |
+| 5 | <code>Feature_0061</code> | 0.0254 |
+| 6 | <code>Feature_0067</code> | 0.0249 |
+| 7 | <code>Feature_0647</code> | 0.0246 |
+| 8 | <code>Feature_0072</code> | 0.0218 |
+| 9 | <code>Feature_0464</code> | 0.0217 |
+| 10 | <code>Feature_0006</code> | 0.0203 |</p>
+<p>Ayrica MRMR'in 10 outer tekrar boyunca tekrar tekrar sectigi ozellikler ozellik kararliligi grafiginde (Sekil 4.6) sunulmustur. SHAP siralamasi ile ortusen ozelliklerin yuksek frekansta secilmesi yorumlamayi guclendirmektedir.</p>
+<p><img alt="Sekil 4.6. Ozellik kararliligi." src="../04_GRAFIKLER/feature_stability.png" />
+<em>Sekil 4.6. MRMR secim frekansi (10 outer repeat uzerinde).</em></p>
+<p><img alt="Sekil 4.7. SHAP ozet grafigi." src="../04_GRAFIKLER/shap_summary.png" />
+<em>Sekil 4.7. SHAP ozet grafigi (ExtraTrees).</em></p>
+<h2>5. TARTISMA</h2>
+<p>Bulgular, calismanin uc temel iddiasini desteklemektedir. Birincisi, hasta seviyesindeki sizintinin sistematik olarak engellenmesi metodolojik bir zorunluluk olarak gozetildiginde bile, model performansi klinik olarak makul aralikta kalmaktadir (SVM makro-F1 0.875 +/- 0.057). Ikincisi, kalibre edilmis temel modellerin yakin karar yuzeyleri ogrenmesi nedeniyle soft voting topluluk modeli en iyi tek modeli geride birakamamistir. Tang ve ark. [6] benzer bir gozlemi farkli agirliklandirma sutrateilerini onererek tartismistir; bu yon ileride incelenebilecek bir adim olabilir.</p>
+<p>Ucuncu ve kritik nokta, sklearn'in son surumunde ortaya cikan metadata routing davranisinin radyomik gibi grup yapisi guclu alanlarda kolayca gozden kacip sizintiya yol acabilecegidir. Calismada, varsayilan <code>CalibratedClassifierCV</code>'nin <code>StratifiedGroupKFold</code> ile birlikte kullanildiginda groups parametresini ic ayiriciya tasimadigi gosterilmis ve manuel Platt scaling sarmalayicisi ile bu sorun cozulmustur. Ileride sklearn'in metadata routing'inin daha kararli hale gelmesiyle bu sarmalayicinin daha kisa bir bicimde yeniden yazilabilmesi mumkun olacaktir.</p>
+<p>Sinif dengesizliginin yonetimi yonunden, SMOTE benzeri yontemler yerine <code>class_weight</code> tabanli yaklasimin tercih edilmesinin literaturle uyumlu oldugu ifade edilebilir [2]. Sentetik orneklerin hasta kimligi olmayan veri noktalari uretmesi, grup folds yapisini bozar ve sizintisiz bir cerceveyi ortadan kaldirir; bu nedenle calismamizda SMOTE yontemine basvurulmamistir.</p>
+<p>Istatistiksel test gucu, n = 10 blok ve 21 ikili karsilastirmanin getirdigi sikilastirilmis Bonferroni esigi (alpha yaklasik 0.0024) nedeniyle sinirlidir. Bu durum Wilcoxon karsilastirmalarinin cogunda anlamliliga ulasilamamasinda etkili olmus, ancak Friedman testi modeller arasi farkin varligini dogrulamistir. Daha cok dis tekrar veya daha buyuk orneklem ile bu sinirin asilmasi mumkundur.</p>
+<h2>6. SONUC VE ONERILER</h2>
+<p>Bu calismada, hasta seviyesinde veri sizintisini engelleyen, 10 dis tekrar ve 5 ic fold uzerine kurulu, kalibrasyonlu ve yorumlanabilir bir radyomik ikili siniflandirma sistemi gelistirilmistir. Sistem MRMR ozellik secimi, Optuna TPE hiperparametre optimizasyonu, sigmoid kalibrasyon, F1 maksimum esik secimi ve soft voting topluluk asamalarini tek bir cerceve icinde bulusturmaktadir. Toplam calisma suresi 70 dakika olup, en yuksek ortalama makro-F1 degerine RBF cekirdekli SVM modeli ile (0.875) ulasilmistir.</p>
+<p>Ileriye yonelik oneriler asagidaki bicimde siralanabilir: (i) outer repeat sayisinin 20 veya uzeri arttirilmasi ile ikili karsilastirma istatistiklerinin gucunun arttirilmasi, (ii) farkli hasta kohortlari uzerinde dis dogrulama yapilmasi, (iii) topluluk modelinde agirlik ogrenimi veya stacking yaklasimlarinin denenmesi, (iv) sklearn metadata routing'inin olgunlasmasi ile manuel kalibrasyon sarmalayicisinin yeniden duzenlenmesi, (v) hem klinik ozelliklerin (yas, cinsiyet, semptom suresi) eklenmesiyle multimodal bir modele gecilmesi.</p>
+<h2>KAYNAKLAR</h2>
+<p>[1] Demircioglu A. Benchmarking Feature Selection Methods in Radiomics. Investigative Radiology, 2022.
+[2] Demircioglu A. The effect of data resampling methods in radiomics. Scientific Reports, 2024.
+[3] Shenoy R., Samra G.S., Sekhri R., et al. Clinician-Led Code-Free Deep Learning for Detecting Papilledema and Pseudopapilledema Using Optic Disc Imaging. Translational Vision Science &amp; Technology, 2026.
+[4] Szanto D., Erekat A., Woods B., et al. Multimodal Deep Learning Differentiates Papilledema and Non-Arteritic Anterior Ischemic Optic Neuropathy From Healthy Eyes. IOVS, 2026.
+[5] Girard M.J.A., Panda S., Tun T.A., et al. Discriminating Between Papilledema and Optic Disc Drusen Using 3D Structural Analysis of the Optic Nerve Head. Neurology, 2023.
+[6] Tang G., Du L., Ling S., Che Y., Chen X. Multi-type classification of lung nodules based on CT radiomics and ensemble learning for diversity weighting. Quantitative Imaging in Medicine and Surgery, 2024.
+[7] Pedregosa F., Varoquaux G., Gramfort A., et al. Scikit-learn: Machine Learning in Python. Journal of Machine Learning Research, 12: 2825-2830, 2011.
+[8] Akiba T., Sano S., Yanase T., Ohta T., Koyama M. Optuna: A Next-generation Hyperparameter Optimization Framework. ACM SIGKDD, 2019.
+[9] Lundberg S.M., Lee S.I. A Unified Approach to Interpreting Model Predictions. Advances in Neural Information Processing Systems, 2017.
+[10] Peng H., Long F., Ding C. Feature selection based on mutual information: criteria of max-dependency, max-relevance, and min-redundancy. IEEE TPAMI, 27(8): 1226-1238, 2005.
+[11] Platt J.C. Probabilistic outputs for support vector machines and comparisons to regularized likelihood methods. Advances in Large Margin Classifiers, 10(3): 61-74, 1999.
+[12] Fang S.S., Chen S.H. AI-assisted diagnosis of neuro-ophthalmic disorders: a systematic review from optic neuritis to papilledema. BMC Ophthalmology, 2026.</p></body></html>
