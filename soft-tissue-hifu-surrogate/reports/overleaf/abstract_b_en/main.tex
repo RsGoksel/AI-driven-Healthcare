@@ -1,0 +1,92 @@
+%% Abstract B – Inverse focal-point synthesis (pdfLaTeX compatible)
+%% Overleaf default compiler (pdfLaTeX) works without any changes.
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper, top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{newtxtext,newtxmath}   % Times-style body + math fonts
+\usepackage{microtype}
+\usepackage{setspace}
+\setstretch{1.12}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\widowpenalty=10000
+\clubpenalty=10000
+
+\usepackage{titling}
+\setlength{\droptitle}{-1.8em}
+\pretitle{\begin{center}\large\bfseries}
+\posttitle{\par\vskip0.2em\hrule height 0.4pt\par\end{center}\vskip1em}
+\preauthor{}\postauthor{}
+\predate{}\postdate{}
+
+\begin{document}
+
+\title{Sample-efficient inverse focal-point synthesis for HIFU phased arrays
+       via gauge-aware reformulation}
+\date{}
+\maketitle
+
+\noindent
+\textbf{Background.}
+Steering a 256-element HIFU phased array onto a desired focus in heterogeneous
+tissue is conventionally posed as inverse phase regression, but the map is
+doubly ill-posed: empirically $Q\to\text{phase}$ is one-to-many
+(nearest-neighbour phase-vector circular-cosine similarity
+\textbf{0.002\,$\pm$\,0.043}, indistinguishable from noise) and the system
+carries a continuous gauge symmetry---adding a constant $+\delta$ to every
+phase produces zero focal displacement and sub-1\,\% intensity change.
+Direct deterministic regression cannot fit this combination.
+
+\noindent
+\textbf{Method.}
+We \textbf{reformulate} the task as \textbf{3-DOF focus-point regression}: a
+compact 3-D CNN (FocusPointNet, 0.89\,M params) predicts $(x,y,z)$ from
+$(\texttt{log1p}(Q),\,\text{mask})$; transducer phases are then synthesised by
+\textbf{analytical delay-and-sum} beamforming, gauge-fixed to $\varphi_0=0$
+and quantised to $5^\circ$ steps.
+The gauge symmetry was verified three independent ways---analytic derivation
+from the delay-and-sum equation, synthetic 256-element least-squares fit, and
+full-wave \textbf{k-Wave simulation} (ITU collaborator)---all reporting
+\textbf{0\,mm focal shift and $<$1\,\% intensity change at $+20^\circ$}.
+
+\noindent
+\textbf{Results.}
+On a 22\,/\,4\,/\,4 split with three random seeds, FocusPointNet achieves
+\textbf{lateral RMS 4.63\,$\pm$\,2.21\,mm ($X$) and 2.69\,$\pm$\,1.21\,mm
+($Y$)}---well inside the 6\,mm focal spot---combined RMS
+\textbf{26.25\,$\pm$\,4.61\,mm}, dominated by the elongated focal zone along
+the axial axis.
+Backbone ablation (CNN\,/\,ResNet-3D\,/\,multi-scale UNet-encoder) and a
+state-of-the-art DSNT heatmap variant (nnLandmark\,/\,H3DE-Net 2025) reach
+equivalent lateral accuracy: \textbf{precision is a property of the task
+formulation, not of any specific backbone}.
+Against five closed-form classical baselines on the same split, FocusPointNet
+improves lateral $X$ by \textbf{3.0$\times$} and $Y$ by \textbf{5.3$\times$}
+over the strongest (amplitude-weighted centroid: 13.82\,/\,14.23\,mm); simpler
+peak-finders collapse to 64--80\,mm RMS because the heat peak is offset from
+the intended target by 30--50\,mm under refraction.
+A $5^\circ$\,/\,$10^\circ$\,/\,$15^\circ$ quantisation study confirms
+$<$0.35\,\% intensity error and sub-0.1\,mm focal shift at $5^\circ$, enabling
+a discrete gauge-fixed output space.
+
+\noindent
+\textbf{Significance.}
+To our knowledge this is the first \textbf{gauge-aware reformulation} of HIFU
+phased-array inverse synthesis as a low-dimensional regression task, recovering
+single-valued ground truth while preserving the underlying physical symmetry.
+The empirical gauge-and-quantisation characterisation is of independent value
+for classical phase optimisers, and the sample-efficient
+learned-localisation\,+\,analytical-beamforming hybrid achieves sub-focal-spot
+lateral accuracy from only 22 training simulations.
+
+\smallskip\noindent
+\textit{Keywords:} HIFU, phased array, gauge symmetry, focal-point regression,
+delay-and-sum, phase quantisation, sample efficiency.
+
+\end{document}

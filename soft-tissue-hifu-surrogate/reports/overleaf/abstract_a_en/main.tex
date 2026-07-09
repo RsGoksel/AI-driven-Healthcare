@@ -1,0 +1,89 @@
+%% Abstract A – Forward surrogate (pdfLaTeX compatible)
+%% Overleaf default compiler (pdfLaTeX) works without any changes.
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper, top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{newtxtext,newtxmath}   % Times-style body + math fonts
+\usepackage{microtype}
+\usepackage{setspace}
+\setstretch{1.12}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\widowpenalty=10000
+\clubpenalty=10000
+
+\usepackage{titling}
+\setlength{\droptitle}{-1.8em}
+\pretitle{\begin{center}\large\bfseries}
+\posttitle{\par\vskip0.2em\hrule height 0.4pt\par\end{center}\vskip1em}
+\preauthor{}\postauthor{}
+\predate{}\postdate{}
+
+\begin{document}
+
+\title{Spectrally-consistent neural surrogate for real-time ultrasound
+       pressure-field prediction in heterogeneous breast tissue}
+\date{}
+\maketitle
+
+\noindent
+\textbf{Background.}
+Patient-specific HIFU planning requires fast pressure-field simulation in
+heterogeneous tissue.
+Full-wave k-Wave delivers reference accuracy but costs
+\textbf{{\raise0.5ex\hbox{$\sim$}}60\,s per 316$\,\times\,$256\,/\,1\,MHz
+configuration} on an RTX\,4070---an order of magnitude too slow for the
+sub-second feedback clinicians need while sweeping the focal target.
+Frequency-domain Helmholtz, ray tracing and lookup tables each fail on a
+different axis (transient information, refraction tail, or per-patient
+adaptivity), defining the engineering slot for a learned forward surrogate that
+is on-the-go and GPU-light.
+
+\noindent
+\textbf{Method.}
+We trained a 2-D Fourier Neural Operator (FNO) and a matched 2-D U-Net
+baseline on \textbf{1\,000 simulations} drawn from the recently released
+\textbf{OpenBreastUS} dataset (Zeng \textit{et al.}\ 2025)---anatomically
+realistic sound-speed, density and attenuation maps derived from real breast
+MRI, chosen for \textit{in\,vivo} fat\,/\,fibroglandular impedance contrast that
+synthetic phantoms cannot reproduce.
+Identical 70\,/\,15\,/\,15 split (seed\,0) across all backbones; combined
+\texttt{LpLoss\,+\,0.3$\cdot$H1Loss} objective; per-channel $z$-scored inputs;
+\texttt{log1p(}$p_{\max}$\texttt{)} $z$-scored targets recovered to Pa via
+\texttt{expm1}.
+
+\noindent
+\textbf{Results.}
+FNO achieves \textbf{test relative L2\,=\,0.097}, against U-Net's
+\textbf{0.264} (\textbf{2.7$\times$} lower error) and a ConvNeXt-2D
+ablation's \textbf{0.99} (an order of magnitude worse).
+Inference completes in \textbf{{\raise0.5ex\hbox{$\sim$}}8\,ms\,/\,sample}
+on the same RTX-4070---a \textbf{{\raise0.5ex\hbox{$\sim$}}7\,500$\times$
+speed-up} over k-Wave at matched accuracy on the test split.
+Validation loss scaled $0.81\to0.39$ from $200\to1{,}000$ samples, indicating
+substantial headroom on the full 8\,000-phantom set.
+Visual inspection confirms FNO recovers the refraction tail that U-Net smears,
+consistent with FFT-based representations matching wave-equation structure.
+
+\noindent
+\textbf{Significance.}
+To our knowledge this is the first application of OpenBreastUS to ultrasound
+treatment-planning surrogates (the original release targets ultrasound CT
+reconstruction).
+Prior neural-operator work (TUSNet 2022, DeepTFUS 2023, Stanziola 2023) used
+non-breast tissue or synthetic phantoms; the \textbf{spectrally-consistent
+backbone advantage} (FNO vs.\ generic CNNs at matched parameter budgets) is a
+heterogeneous-tissue-specific finding not previously established and a
+clinically relevant building block for real-time HIFU planning.
+
+\smallskip\noindent
+\textit{Keywords:} HIFU, Fourier Neural Operator, k-Wave, OpenBreastUS,
+real-time treatment planning, wave equation, breast ultrasound.
+
+\end{document}

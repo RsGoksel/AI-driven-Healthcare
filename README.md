@@ -9,6 +9,7 @@ A collection of applied machine-learning projects in medical imaging and clinica
 | 1 | [`abdomen-multi-disease-detection/`](abdomen-multi-disease-detection/) | Abdominal CT — multi-disease detection | TEKNOFEST 2022, Healthcare AI Competition |
 | 2 | [`mammography-abnormality-detection/`](mammography-abnormality-detection/) | Screening mammography — BI-RADS / breast composition / tissue cropping | TEKNOFEST 2023, Healthcare AI Competition |
 | 3 | [`papilodem-radiomics/`](papilodem-radiomics/) | Fundus/OCT radiomics — papilledema classification | Üsküdar University, AI course final project |
+| 4 | [`soft-tissue-hifu-surrogate/`](soft-tissue-hifu-surrogate/) | HIFU treatment planning — neural surrogate models | Symposium research submission |
 
 ## Projects
 
@@ -23,6 +24,10 @@ Preprocessing and tissue-cropping pipeline (pectoral-muscle removal, CLAHE enhan
 ### [Papilledema Radiomics](papilodem-radiomics/)
 
 Patient-level binary classification of papilledema vs. normal optic discs from 746 radiomic features, with MRMR feature selection, Optuna-tuned ensemble models, calibration, and SHAP explainability.
+
+### [Soft-Tissue HIFU Surrogate](soft-tissue-hifu-surrogate/)
+
+Neural surrogate models (FNO2d, FocusPointNet) that replace a ~60-second-per-configuration k-Wave ultrasound solver with millisecond-scale inference for HIFU treatment planning in heterogeneous breast tissue — up to 7,500× faster than the physics reference.
 
 ## License
 
